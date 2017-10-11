@@ -1,38 +1,38 @@
-deck = [0,0,0,0,1,2,3,4,5,6,7,8,9,
-	0,0,0,0,1,2,3,4,5,6,7,8,9,
-	0,0,0,0,1,2,3,4,5,6,7,8,9,
-	0,0,0,0,1,2,3,4,5,6,7,8,9]
+#need variable shoe cut and variable amount of burn cards
 
-shoe = deck * 8
+shoe_cut = 14
+puts "shoe cut snoqualmie standards is 14"
+# 1 card then cut card then 5 cards, 6 cards. 3 remain in max case. 
 
-shoe = shoe.shuffle
+def new_shoe (shoe_cut)
+	# deck of 52 cards
+	deck = [1,2,3,4,5,6,7,8,9,10,10,10,10,
+		1,2,3,4,5,6,7,8,9,10,10,10,10,
+		1,2,3,4,5,6,7,8,9,10,10,10,10,
+		1,2,3,4,5,6,7,8,9,10,10,10,10]
+	# 8 decks are in a baccarat shoe.
+	shoe = deck * 8
+	# shuffle the shoe.
+	shoe = shoe.shuffle
+	# insert a "cut card". One more hand will be played when the cut card 
+	# is next to be played or if pulled during a hand. 
+	shoe.insert(shoe_cut,"Cut Card")
+	# First card of the shoe is pulled and a corresponding number of 
+	# cards will be burned.
+	puts shoe.last
+	shoe.last.times {shoe.delete_at(shoe.size - 1)}
+	print shoe
+	puts "shoe size is #{shoe.size}"
+	#abort
+	return shoe
+end
 
-print shoe
-puts
 
 def deal_hand(shoe)
 	p=[shoe.pop]
 	b=[shoe.pop]
 	p.push(shoe.pop)
 	b.push(shoe.pop)
-
-=begin
-	print p
-	puts
-	print b
-	puts
-	print shoe
-	puts
-=end
-
-
-#need variable shoe cut and variable amount of burn cards
-
-burn_cards = 1 + rand(9)
-puts "burn cards amount is #{burn_cards}"
-shoe_cut = 14
-puts "shoe cut snoqualmie standards is 14"
-# 1 card then cut card then 5 cards, 6 cards. 3 remain in max case. 
 
 	puts "player shows #{(p[0] + p[1]) % 10}"
 	puts "banker has #{(b[0] + b[1]) % 10}"
@@ -64,7 +64,6 @@ puts "shoe cut snoqualmie standards is 14"
 		else
 			puts "T"
 		end
-	#MUST DEAL WITH BANKER 6 HIT CASE
 	elsif (((b[0] + b[1]) % 10 == 7) && (p[0] + p[1]) % 10 < 6)
 		puts "banker is 6 or 7 and player is not"
 		p.push(shoe.pop)
@@ -107,7 +106,7 @@ puts "shoe cut snoqualmie standards is 14"
 				elsif ((p[0] + p[1] + p[2]) % 10 < (b[0] + b[1] + b[2]) % 10)
 					puts "BW"
 				else
-					puts "T"
+					puts "T, Banker at #{(b[0] + b[1] + b[2]) % 10} and player at #{(p[0] + p[1] + p[2]) % 10}"
 				end
 			else 
 				if ((p[0] + p[1] + p[2]) % 10 > (b[0] + b[1]) % 10)
@@ -115,7 +114,7 @@ puts "shoe cut snoqualmie standards is 14"
 				elsif ((p[0] + p[1] + p[2]) % 10 < (b[0] + b[1]) % 10)
 					puts "BW"
 				else
-					puts "T"
+					puts "T, Banker at #{(b[0] + b[1]) % 10} and player at #{(p[0] + p[1] + p[2]) % 10}"
 				end
 			end
 
@@ -127,7 +126,7 @@ puts "shoe cut snoqualmie standards is 14"
 				elsif ((p[0] + p[1] + p[2]) % 10 < (b[0] + b[1] + b[2]) % 10)
 					puts "BW"
 				else
-					puts "T"
+					puts "T, Banker at #{(b[0] + b[1] + b[2]) % 10} and player at #{(p[0] + p[1] + p[2]) % 10}"
 				end
 			else 
 				if ((p[0] + p[1] + p[2]) % 10 > (b[0] + b[1]) % 10)
@@ -135,7 +134,7 @@ puts "shoe cut snoqualmie standards is 14"
 				elsif ((p[0] + p[1] + p[2]) % 10 < (b[0] + b[1]) % 10)
 					puts "BW"
 				else
-					puts "T"
+					puts "T, Banker at #{(b[0] + b[1]) % 10} and player at #{(p[0] + p[1] + p[2]) % 10}"
 				end
 			end
 		elsif ((b[0] + b[1]) % 10 == 3)
@@ -145,7 +144,7 @@ puts "shoe cut snoqualmie standards is 14"
 				elsif ((p[0] + p[1] + p[2]) % 10 < (b[0] + b[1]) % 10)
 					puts "BW"
 				else
-					puts "T"
+					puts "T, Banker at #{(b[0] + b[1]) % 10} and player at #{(p[0] + p[1] + p[2]) % 10}"
 				end
 			else 
 				b.push(shoe.pop)
@@ -154,7 +153,7 @@ puts "shoe cut snoqualmie standards is 14"
 				elsif ((p[0] + p[1] + p[2]) % 10 < (b[0] + b[1] + b[2]) % 10)
 					puts "BW"
 				else
-					puts "T"
+					puts "T, Banker at #{(b[0] + b[1] + b[2]) % 10} and player at #{(p[0] + p[1] + p[2]) % 10}"
 				end
 			end
 		else 
@@ -164,11 +163,27 @@ puts "shoe cut snoqualmie standards is 14"
 			elsif ((p[0] + p[1] + p[2]) % 10 < (b[0] + b[1] + b[2]) % 10)
 				puts "BW"
 			else
-				puts "T"
+				puts "T, Banker at #{(b[0] + b[1] + b[2]) % 10} and player at #{(p[0] + p[1] + p[2]) % 10}"
 			end
 		end
 	end
 end
 
-	
-deal_hand(shoe)
+
+def play_shoe(num_hands, shoe)
+	begin
+		while (num_hands > 0)
+			deal_hand(shoe)
+			num_hands -= 1
+			puts num_hands
+		end
+		puts "SHOE HAS ENDED"
+	rescue Exception => e
+		puts e.message
+		puts "cut card drawn one more hand"
+		deal_hand(shoe)
+	end
+end
+
+100.times {play_shoe(70,new_shoe(shoe_cut))}
+
